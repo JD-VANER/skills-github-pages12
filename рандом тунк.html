@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Запуск кода с выводом результата</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #codeInput {
+            width: 100%;
+            height: 200px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        #runButton {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            min-height: 100px;
+            white-space: pre-wrap;
+
+            border: 1px solid #ccc;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+
+
+        @media (min-width: 601px) and (max-width: 1200px) {
+            body {
+                font-size: 16px;
+                padding: 20px;
+            }
+        }
+
+
+        @media (min-width: 1201px) {
+            body {
+                font-size: 18px;
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Введите ваш код:</h2>
+
+    <textarea id="codeInput">
+        const items = [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+     
+      ];
+      
+      function getRandomItem(array) {
+        const randomIndex = Math.floor(Math.random() * array.length);
+        return array[randomIndex];
+      }
+      
+      const randomItem = getRandomItem(items);
+      alert("Случайный инвалид: " + randomItem);
+</textarea>
+
+
+    <button id="runButton">Выполнить код</button>
+
+    <h3>Результат выполнения:</h3>
+
+    <div id="output"></div>
+
+    <script>
+
+        document.getElementById('runButton').addEventListener('click', () => {
+            const code = document.getElementById('codeInput').value;
+            const outputDiv = document.getElementById('output');
+
+
+            outputDiv.textContent = '';
+
+
+            const logs = [];
+
+
+            const originalConsoleLog = console.log;
+
+
+            console.log = function (...args) {
+                logs.push(args.join(' '));
+                originalConsoleLog.apply(console, args);
+            };
+
+            try {
+
+                eval(code);
+
+
+                if (logs.length > 0) {
+                    outputDiv.textContent = logs.join('\n');
+                } else {
+                    outputDiv.textContent = 'Код выполнен успешно, но не было вызовов console.log().';
+                }
+
+            } catch (e) {
+                outputDiv.textContent = 'Ошибка:\n' + e.message;
+            } finally {
+
+                console.log = originalConsoleLog;
+            }
+        });
+    </script>
+
+</body>
+
+</html>
